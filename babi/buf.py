@@ -229,9 +229,14 @@ class Buf:
     def _cursor_x(self) -> int:
         return self.line_positions(self.y)[self.x]
 
+    @property
+    def line_numbers_len(self) -> int:
+        lines = len(self._lines)
+        return max(2, len(str(lines)))
+
     def cursor_position(self, margin: Margin) -> Tuple[int, int]:
         y = self.y - self.file_y + margin.header
-        x = self._cursor_x - self.line_x(margin)
+        x = self._cursor_x - self.line_x(margin) + self.line_numbers_len + 1
         return y, x
 
     # rendered lines

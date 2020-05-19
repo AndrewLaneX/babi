@@ -784,6 +784,7 @@ class File:
 
     def draw(self, stdscr: 'curses._CursesWindow', margin: Margin) -> None:
         to_display = min(self.buf.displayable_count, margin.body_lines)
+        l_n_len = self.buf.line_numbers_len
 
         for file_hl in self._file_hls:
             # XXX: this will go away?
@@ -792,7 +793,9 @@ class File:
         for i in range(to_display):
             draw_y = i + margin.header
             l_y = self.buf.file_y + i
-            stdscr.insstr(draw_y, 0, self.buf.rendered_line(l_y, margin))
+            l_n = str(l_y + 1).rjust(l_n_len)
+            stdscr.insstr(draw_y, 0, l_n, curses.A_REVERSE)
+            stdscr.insstr(draw_y, l_n_len, ' ' + self.buf.rendered_line(l_y, margin))
 
             l_x = self.buf.line_x(margin) if l_y == self.buf.y else 0
             l_x_max = l_x + margin.cols
@@ -828,7 +831,7 @@ class File:
                     else:
                         h_e_x = r_end - l_x
 
-                    stdscr.chgat(draw_y, h_s_x, h_e_x - h_s_x, region.attr)
+                    stdscr.chgat(draw_y, h_s_x + l_n_len + 1, h_e_x - h_s_x, region.attr)
 
         for i in range(to_display, margin.body_lines):
             stdscr.move(i + margin.header, 0)
