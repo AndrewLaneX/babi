@@ -223,7 +223,7 @@ class Buf:
         return value
 
     def line_x(self, margin: Margin) -> int:
-        return line_x(self._cursor_x, margin.cols)
+        return line_x(self._cursor_x, margin.cols - self.line_numbers_len)
 
     @property
     def _cursor_x(self) -> int:
@@ -243,7 +243,7 @@ class Buf:
 
     def rendered_line(self, idx: int, margin: Margin) -> str:
         x = self._cursor_x if idx == self.y else 0
-        return scrolled_line(self._lines[idx].expandtabs(4), x, margin.cols)
+        return scrolled_line(self._lines[idx].expandtabs(4), x, margin.cols - self.line_numbers_len)
 
     # movement
 
