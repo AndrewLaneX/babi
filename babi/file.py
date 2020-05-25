@@ -831,7 +831,8 @@ class File:
                     else:
                         h_e_x = r_end - l_x
 
-                    stdscr.chgat(draw_y, h_s_x + l_n_len + 1, h_e_x - h_s_x, region.attr)
+                    x = max(0, min(h_s_x + l_n_len + 1, margin.cols - 1))
+                    stdscr.chgat(draw_y, x, h_e_x - h_s_x, region.attr)
 
         for i in range(to_display, margin.body_lines):
             stdscr.move(i + margin.header, 0)
